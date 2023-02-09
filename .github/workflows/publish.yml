@@ -18,10 +18,19 @@ jobs:
           scope: '@hvedinich'
       - run: yarn
       - run: yarn build
+
   publish:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Bump versions
+        uses: remorses/bump-version@js
+        with:
+          version_file: ./package.json
+          prerelease_tag: alpha
+          ignore: dist, ignored_folder
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
