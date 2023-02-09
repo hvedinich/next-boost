@@ -30,8 +30,13 @@ jobs:
           # Defaults to the user or organization that owns the workflow file
           scope: '@hvedinich'
       - run: git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com" && git config --global user.name "$GITHUB_ACTOR"
+      - run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
       - run: yarn version --minor
       - run: git push --tags && git push
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
