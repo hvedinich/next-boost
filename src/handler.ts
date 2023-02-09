@@ -39,9 +39,15 @@ const wrap: WrappedHandler = (cache, conf, renderer, next, metrics) => {
   return async (req, res) => {
     if (conf.metrics && forMetrics(req)) return serveMetrics(metrics, res)
 
+    const urlBeforeFilter = req.url
     req.url = filterUrl(req.url ?? '', conf.paramFilter)
     const key = conf.cacheKey ? conf.cacheKey(req) : req.url
     const { matched, ttl } = matchRules(conf, req)
+
+    // restore original url so that all params are passed to
+    // the original renderer on cache miss
+    req.url = urlBeforeFilter
+    
     if (!matched) {
       metrics.inc('bypass')
       res.setHeader('x-next-boost-status', 'bypass')
