@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && swc src --out-dir dist",
+    "prepublishOnly": "yarn tsc && yarn test",
     "lint": "eslint src/*.ts test/*.ts",
     "test": "jest --testPathIgnorePatterns redis"
   },
@@ -21,10 +22,10 @@
     "url": "https://github.com/hvedinich/next-boost/issues"
   },
   "homepage": "https://github.com/hvedinich/next-boost#readme",
-  "directories": {
-    "example": "examples",
-    "test": "test"
-  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "dependencies": {
     "http-graceful-shutdown": "^3.1.7",
     "multee": "^0.2.3",
